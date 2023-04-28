@@ -1,5 +1,7 @@
 # cubic-limit
 
-Remake of [Cubic Limit by Manfred Mohr (1973-1975)](http://www.emohr.com/paris-1975/catalog/layoutcatalog75.html).
+Manfred Mohr's [Cubic Limit](http://www.emohr.com/cubic_limit_1.html) in functional style.
 
-![cubic limit 1](./cubic1.png)
+**[P-161](http://www.emohr.com/mohr_cube1_161.html)**
+
+![cubic limit 1](./p161-6.png)
