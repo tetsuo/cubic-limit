@@ -2,43 +2,17 @@
   <head> </head>
 
   <body>
-    <div style="padding: 20px; display: inline-block; background-color: #252525">
-      <canvas
-        id="canvas1"
-        style="background-color: transparent; border: 1px solid #ffffff"
-        width="1054"
-        height="1054"
-      ></canvas>
+    <div style="padding: 20px; display: inline-block; background-color: #1c1b17">
+      <canvas id="p161" style="border: 1px solid #fff" width="1054" height="1054"></canvas>
     </div>
-    <script>
-      function fixRes() {
-        const canvas = document.getElementById('canvas1')
-
-        const ctx = canvas.getContext('2d')
-
-        // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#scaling_for_high_resolution_displays
-
-        // Get the DPR and size of the canvas
-        const dpr = window.devicePixelRatio
-        const rect = canvas.getBoundingClientRect()
-
-        // Set the "actual" size of the canvas
-        canvas.width = rect.width * dpr
-        canvas.height = rect.height * dpr
-
-        // Scale the context to ensure correct drawing operations
-        ctx.scale(dpr, dpr)
-
-        // Set the "drawn" size of the canvas
-        canvas.style.width = `${rect.width}px`
-        canvas.style.height = `${rect.height}px`
-      }
-
-      fixRes()
-    </script>
+    <hr />
+    <div style="padding: 20px; display: inline-block; background-color: #1c1b17">
+      <canvas id="p197" width="1054" height="1054"></canvas>
+    </div>
     <script src="bundle.js"></script>
     <script>
-      cubiclimit.p161('canvas1')()
+      cubiclimit.p161('p161')()
+      cubiclimit.p197('p197')()
     </script>
   </body>
 </html>
