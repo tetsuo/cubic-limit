@@ -187,7 +187,7 @@ const withClipping = (n: number, offset = 0, scale = 1, d: D.Drawing): D.Drawing
     d
   )
 
-const renderLines = (n: number, vertical: boolean): D.Drawing =>
+const renderLines = (n: number, len: number, vertical: boolean): D.Drawing =>
   D.many(
     pipe(
       RNEA.range(1, n),
@@ -196,12 +196,12 @@ const renderLines = (n: number, vertical: boolean): D.Drawing =>
           path(
             vertical
               ? [
-                  [i * 1, 0, 0],
-                  [i * 1, 1 * (n + 1), 0],
+                  [i, 0, 0],
+                  [i, len, 0],
                 ]
               : [
-                  [0, i * 1, 0],
-                  [1 * (n + 1), i * 1, 0],
+                  [0, i, 0],
+                  [len, i, 0],
                 ]
           ),
           D.outlineColor(Color.white)
@@ -230,7 +230,7 @@ export const p197 = ({ width, height }: Size): D.Drawing => {
 
   return D.many([
     background,
-    scaled(D.many([renderLines(8, false)])),
+    scaled(D.many([renderLines(8, 9, false)])),
     withClipping(
       4,
       0,
@@ -265,6 +265,6 @@ export const p197 = ({ width, height }: Size): D.Drawing => {
         )
       )
     ),
-    scaled(D.many([renderLines(8, true)])),
+    scaled(D.many([renderLines(8, 9, true)])),
   ])
 }
