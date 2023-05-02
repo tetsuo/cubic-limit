@@ -1,6 +1,6 @@
 # cubic-limit
 
-Manfred Mohr's [Cubic Limit](http://www.emohr.com/paris-1975/catalog/layoutcatalog75.html) in functional style.
+Remake of Manfred Mohr's [Cubic Limit](http://www.emohr.com/paris-1975/catalog/layoutcatalog75.html) in functional style using [drawing3d](https://github.com/onur1/drawing3d).
 
 **[P-161](http://www.emohr.com/mohr_cube1_161.html)**
 
