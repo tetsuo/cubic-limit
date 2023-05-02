@@ -23,7 +23,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@onur1/drawing3d": "^0.0.2",
+    "@onur1/drawing3d": "^0.0.3",
     "fp-ts": "^2.14.0"
   },
   "devDependencies": {
