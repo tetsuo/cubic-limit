@@ -6,6 +6,6 @@ Manfred Mohr's [Cubic Limit](http://www.emohr.com/paris-1975/catalog/layoutcatal
 
 ![p161](./p161.png)
 
-**[P-161](http://www.emohr.com/mohr_cube2_197k.html)**
+**[P-197](http://www.emohr.com/mohr_cube2_197k.html)**
 
 ![p197](./p197.png)
