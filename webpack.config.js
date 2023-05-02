@@ -5,7 +5,7 @@ const config = {
   entry: './src/index.ts',
   output: {
     filename: './bundle.js',
-    path: __dirname + '/public',
+    path: __dirname + '/docs',
     library: 'cubiclimit',
     libraryTarget: 'window',
     libraryExport: 'default',
