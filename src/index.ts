@@ -1,5 +1,5 @@
-import * as C from '@onur1/drawing3d/lib/Canvas'
-import * as D from '@onur1/drawing3d/lib/Drawing'
+import * as C from '@onur1/graphics3d-ts/lib/Canvas'
+import * as D from '@onur1/graphics3d-ts/lib/Drawing'
 import * as IO from 'fp-ts/IO'
 import { error } from 'fp-ts/lib/Console'
 import { flow, pipe } from 'fp-ts/lib/function'

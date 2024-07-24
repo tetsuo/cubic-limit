@@ -1,8 +1,8 @@
-import * as D from '@onur1/drawing3d/lib/Drawing'
-import * as S from '@onur1/drawing3d/lib/Shape'
+import * as D from '@onur1/graphics3d-ts/lib/Drawing'
+import * as S from '@onur1/graphics3d-ts/lib/Shape'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
 import * as RA from 'fp-ts/ReadonlyArray'
-import * as Color from '@onur1/drawing3d/lib/Color'
+import * as Color from '@onur1/graphics3d-ts/lib/Color'
 import { pipe, tuple } from 'fp-ts/lib/function'
 
 const path = S.path(RNEA.Foldable)
