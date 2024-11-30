@@ -12,3 +12,4 @@ An implementation of **Manfred Mohr's [Cubic Limit](http://www.emohr.com/paris-1
 
 - [http://www.emohr.com/mohr_cube1_161.html](http://www.emohr.com/mohr_cube1_161.html)
 - [http://www.emohr.com/mohr_cube2_197k.html](http://www.emohr.com/mohr_cube2_197k.html)
+- The canvas drawing library is adapted for 3D and Effect, based on Giulio Canti's [graphics-ts](https://github.com/gcanti/graphics-ts).
