@@ -1,18 +1,82 @@
 <html>
-  <head> </head>
+  <head></head>
+  <body style="margin: 0; padding: 0">
+    <h1>p161</h1>
+    <ul>
+      <li><a href="http://www.emohr.com/mohr_cube1_161.html" target="_blank">http://www.emohr.com/mohr_cube1_161.html</a></li>
+    </ul>
+    <div
+      style="margin: 0; padding: 20px; display: inline-block; background-color: #1c1b17"
+      id="container1"
+    ></div>
 
-  <body>
-    <div style="padding: 20px; display: inline-block; background-color: #1c1b17">
-      <canvas id="p161" style="border: 1px solid #fff" width="1054" height="1054"></canvas>
+    <h1>p197</h1>
+    <ul>
+      <li><a href="http://www.emohr.com/mohr_cube2_197k.html" target="_blank">http://www.emohr.com/mohr_cube2_197k.html</a></li>
+    </ul>
+    <div style="padding: 20px; display: inline-block; background-color: #1c1b17" id="container2">
     </div>
-    <hr />
-    <div style="padding: 20px; display: inline-block; background-color: #1c1b17">
-      <canvas id="p197" width="1054" height="1054"></canvas>
-    </div>
-    <script src="bundle.min.js"></script>
-    <script>
-      cubiclimit.p161('p161')()
-      cubiclimit.p197('p197')()
+    <h2>Source</h2>
+    <ul>
+      <li>
+        <a href="https://github.com/tetsuo/cubic-limit" target="_blank">https://github.com/tetsuo/cubic-limit</a>
+      </li>
+    </ul>
+    <script src="fp-ts-bundle.min.js"></script>
+    <script type="module">
+      import drawP167 from './drawCubicLimit.js'
+      function throttle(fn, time) {
+        let timeout = null
+        return function () {
+          if (timeout) return
+          const context = this
+          const args = arguments
+          const later = () => {
+            fn.call(context, ...args)
+            timeout = null
+          }
+          timeout = setTimeout(later, time)
+        }
+      }
+
+      function redraw() {
+        let p1 = document.querySelector('#container1')
+        let p2 = document.querySelector('#container2')
+        while (p1.firstChild) {
+          p1.removeChild(p1.firstChild);
+        }
+        while (p2.firstChild) {
+          p2.removeChild(p2.firstChild);
+        }
+
+        let c = document.createElement('canvas')
+        c.id = 'root1'
+        c.setAttribute('width', window.innerWidth - 44)
+        c.setAttribute('height', window.innerWidth - 44)
+        c.style.border = '1px solid #fff'
+
+        let container = document.querySelector('#container1')
+        container.appendChild(c)
+
+        drawP167('root1', '#1c1b17') // Effect
+
+        c = document.createElement('canvas')
+        c.id = 'root2'
+        c.setAttribute('width', window.innerWidth - 44)
+        c.setAttribute('height', window.innerWidth - 44)
+
+        container = document.querySelector('#container2')
+        container.appendChild(c)
+
+        cubiclimit.p197('root2')() // fp-ts
+      }
+
+      function onresize() {
+        redraw()
+      }
+
+      window.addEventListener('resize', throttle(onresize, 100))
+      redraw()
     </script>
   </body>
 </html>

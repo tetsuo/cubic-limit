@@ -3,3 +3,5 @@ lib
 .release
 coverage
 .vscode
+src/*.js*
+__tests__/*.js*

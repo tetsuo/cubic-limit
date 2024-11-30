@@ -3,12 +3,12 @@ module.exports = {
   env: {
     node: true,
     mocha: true,
-    es6: true
+    es6: true,
   },
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
     semi: 'off',
@@ -38,6 +38,6 @@ module.exports = {
     'no-class-assign': 'error',
     'no-dupe-class-members': 'off',
     'no-var': 'error',
-    'prefer-arrow-callback': 'error'
-  }
+    'prefer-arrow-callback': 'error',
+  },
 }
