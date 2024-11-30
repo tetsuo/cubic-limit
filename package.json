@@ -1,5 +1,5 @@
 {
-  "name": "@onur1/cubic-limit",
+  "name": "@tetsuo/cubic-limit",
   "private": true,
   "version": "0.0.0",
   "description": "",
@@ -23,7 +23,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@onur1/graphics3d-ts": "^0.0.4",
+    "@tetsuo/graphics3d-ts": "^0.0.5",
     "fp-ts": "^2.14.0"
   },
   "devDependencies": {

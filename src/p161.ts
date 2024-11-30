@@ -3,10 +3,10 @@ import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
 import * as E from 'fp-ts/Either'
 import { Predicate } from 'fp-ts/lib/Predicate'
 import { flow, pipe, tuple } from 'fp-ts/lib/function'
-import * as S from '@onur1/graphics3d-ts/lib/Shape'
-import * as Color from '@onur1/graphics3d-ts/lib/Color'
-import { Vec } from '@onur1/graphics3d-ts/lib/Vec'
-import * as D from '@onur1/graphics3d-ts/lib/Drawing'
+import * as S from '@tetsuo/graphics3d-ts/lib/Shape'
+import * as Color from '@tetsuo/graphics3d-ts/lib/Color'
+import { Vec } from '@tetsuo/graphics3d-ts/lib/Vec'
+import * as D from '@tetsuo/graphics3d-ts/lib/Drawing'
 
 const path = S.path(RA.Foldable)
 
