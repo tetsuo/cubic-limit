@@ -10,29 +10,29 @@ import {
   reduce,
   setNonEmptyLast,
 } from 'effect/Array'
-import { Foldable } from '@effect/typeclass/data/Array'
-import { Vec } from './Vec'
-import { Shape } from './Shape'
+import { toReadonlyArray } from '@effect/data/Chunk'
+import { Shape, Point } from './Shape'
 
-const isPointFinite = (point: Vec): boolean => isFinite(point[0]) && isFinite(point[1]) && isFinite(point[2])
+const isPointFinite = (point: Point): boolean =>
+  isFinite(point[0]) && isFinite(point[1]) && isFinite(point[2])
 
 // -------------------------------------------------------------------------------------
 // model
 // -------------------------------------------------------------------------------------
 
-export type Path3D = ReadonlyArray<ReadonlyArray<Vec>>
+export type Path3D = ReadonlyArray<ReadonlyArray<Point>>
 
 // -------------------------------------------------------------------------------------
 // constructors
 // -------------------------------------------------------------------------------------
 
-export const renderShape: (shape: Shape) => Path3D = shape => {
+export const fromShape: (shape: Shape) => Path3D = shape => {
   switch (shape._tag) {
     case 'Composite':
-      return Foldable.reduce(shape.shapes, [] as Path3D, (b, a) => b.concat(renderShape(a)))
+      return shape.shapes.flatMap(fromShape)
     case 'Path':
       return pipe(
-        shape.points,
+        toReadonlyArray(shape.points),
         matchLeft({
           onEmpty: empty,
           onNonEmpty: (head, tail) =>
@@ -52,7 +52,7 @@ export const renderShape: (shape: Shape) => Path3D = shape => {
 // -------------------------------------------------------------------------------------
 
 export const moveTo =
-  (point: Vec) =>
+  (point: Point) =>
   (path: Path3D): Path3D =>
     isPointFinite(point)
       ? // Create a new subpath with the specified point.
@@ -60,7 +60,7 @@ export const moveTo =
       : path
 
 export const lineTo =
-  (point: Vec) =>
+  (point: Point) =>
   (path: Path3D): Path3D =>
     isPointFinite(point)
       ? isNonEmptyReadonlyArray(path)
@@ -93,5 +93,5 @@ export const closePath = (path: Path3D): Path3D => {
 
   // Mark the last path as closed adding a new subpath whose first point
   // is the same as the previous subpath's first point.
-  return append(setNonEmptyLast(append(cur, start) as ReadonlyArray<Vec>)(path), [start])
+  return append(setNonEmptyLast(append(cur, start) as ReadonlyArray<Point>)(path), [start])
 }

@@ -1,5 +1,6 @@
 import * as assert from 'node:assert'
 import { Foldable } from '@effect/typeclass/data/Array'
+import { fromIterable } from '@effect/data/Chunk'
 import * as _ from '../src/Shape'
 
 const deepStrictEqual = <A>(actual: A, expected: A) => {
@@ -29,18 +30,18 @@ describe('Shape', () => {
           {
             _tag: 'Path',
             closed: false,
-            points: [
+            points: fromIterable([
               [1, 2],
               [3, 4],
-            ],
+            ] as const),
           },
           {
             _tag: 'Path',
             closed: true,
-            points: [
+            points: fromIterable([
               [1, 2],
               [3, 4],
-            ],
+            ] as const),
           },
         ],
       }
@@ -67,12 +68,12 @@ describe('Shape', () => {
       {
         _tag: 'Path',
         closed: true,
-        points: [
+        points: fromIterable([
           [1, 2, 3, 4],
           [5, 6, 7, 8],
           [11, 22, 33, 44],
           [55, 66, 77, 88],
-        ],
+        ] as const),
       }
     )
   })

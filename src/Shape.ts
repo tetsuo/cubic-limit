@@ -1,11 +1,10 @@
-import { Monoid, fromSemigroup, struct } from '@effect/typeclass/Monoid'
-import { make } from '@effect/typeclass/Semigroup'
-import { getMonoid } from '@effect/typeclass/data/Array'
 import { MonoidSome } from '@effect/typeclass/data/Boolean'
 import { constant } from 'effect/Function'
-import { append } from 'effect/Array'
+import { fromSemigroup, Monoid, struct } from '@effect/typeclass/Monoid'
 import { Foldable } from '@effect/typeclass/Foldable'
+import { make } from '@effect/typeclass/Semigroup'
 import { Kind, TypeLambda } from 'effect/HKT'
+import { Chunk, append, appendAll, empty } from '@effect/data/Chunk'
 import { Vec } from './Vec'
 
 // -------------------------------------------------------------------------------------
@@ -36,7 +35,7 @@ export interface Composite {
 export interface Path {
   readonly _tag: 'Path'
   readonly closed: boolean
-  readonly points: ReadonlyArray<Point>
+  readonly points: Chunk<Point>
 }
 
 // -------------------------------------------------------------------------------------
@@ -55,21 +54,21 @@ export const composite = (shapes: ReadonlyArray<Shape>): Composite => ({
 })
 
 export const closed =
-  <F extends TypeLambda>(F: Foldable<F>): (<E, A>(fa: Kind<F, unknown, E, A, Point>) => Path) =>
+  <F extends TypeLambda>(F: Foldable<F>): ((fa: Kind<F, unknown, unknown, unknown, Point>) => Path) =>
   fa =>
     F.reduce(fa, monoidPath.empty, (b, a) => ({
       _tag: 'Path',
       closed: true,
-      points: append(a)(b.points),
+      points: append(b.points, a),
     }))
 
 export const path =
-  <F extends TypeLambda>(F: Foldable<F>): (<E, A>(fa: Kind<F, unknown, E, A, Point>) => Path) =>
+  <F extends TypeLambda>(F: Foldable<F>): ((fa: Kind<F, unknown, unknown, unknown, Point>) => Path) =>
   fa =>
     F.reduce(fa, monoidPath.empty, (b, a) => ({
       _tag: 'Path',
       closed: false,
-      points: append(a)(b.points),
+      points: append(b.points, a),
     }))
 
 // -------------------------------------------------------------------------------------
@@ -92,5 +91,5 @@ export const angle = (angle: Angle): number => {
 export const monoidPath: Monoid<Path> = struct({
   _tag: fromSemigroup<'Path'>(make(constant('Path')), 'Path'),
   closed: MonoidSome,
-  points: getMonoid<Point>(),
+  points: fromSemigroup(make<Chunk<Point>>(appendAll), empty()),
 })

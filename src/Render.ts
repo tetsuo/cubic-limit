@@ -7,8 +7,9 @@ import { toCoords, Transform3D } from './Transform3D'
 import { identity, mul, rotateX, rotateY, rotateZ, scale, semigroupMat, translate } from './Mat'
 import * as D from './Drawing'
 import * as Color from './Color'
-import { angle } from './Shape'
+import { angle, Shape } from './Shape'
 import { Vec } from './Vec'
+import { fromShape } from './Path3D'
 
 class Render extends Tag('Render')<
   Render,
@@ -42,13 +43,8 @@ const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
           andThen(c.restore)
         )
 
-      const applyStyle: <A>(o: Option<A>, f: (a: A) => Micro<void>) => Micro<void> = (fa, f) => {
-        if (isSome(fa)) {
-          return f(fa.value)
-        } else {
-          return success
-        }
-      }
+      const applyStyle: <A>(o: Option<A>, f: (a: A) => Micro<void>) => Micro<void> = (fa, f) =>
+        isSome(fa) ? f(fa.value) : success
 
       const renderSubPath: (subPath: ReadonlyArray<Vec>) => Micro<void> = matchLeft({
         onEmpty: () => success,
@@ -58,6 +54,9 @@ const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
             andThen(() => forEach(tail, c.lineTo, { discard: true }))
           ),
       })
+
+      const renderShape = (shape: Shape, transform: Transform3D) =>
+        forEach(toCoords(fromShape(shape), transform), renderSubPath, { discard: true })
 
       const go: (transform: Transform3D) => (drawing: D.Drawing) => Micro<void> = t => d => {
         switch (d._tag) {
@@ -82,7 +81,7 @@ const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
                 andThen(() => applyStyle(d.style.lineCap, c.setLineCap)),
                 andThen(() => applyStyle(d.style.lineJoin, c.setLineJoin)),
                 andThen(c.beginPath),
-                andThen(() => forEach(toCoords(d.shape, t), renderSubPath, { discard: true })),
+                andThen(() => renderShape(d.shape, t)),
                 andThen(c.stroke)
               )
             )
@@ -91,7 +90,7 @@ const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
               pipe(
                 applyStyle(d.style.color, flow(Color.toCss, c.setFillStyle)),
                 andThen(c.beginPath),
-                andThen(() => forEach(toCoords(d.shape, t), renderSubPath, { discard: true })),
+                andThen(() => renderShape(d.shape, t)),
                 andThen(() => c.fill())
               )
             )
@@ -99,7 +98,7 @@ const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
             return withContext(
               pipe(
                 c.beginPath(),
-                andThen(() => forEach(toCoords(d.shape, t), renderSubPath, { discard: true })),
+                andThen(() => renderShape(d.shape, t)),
                 andThen(() => c.clip()),
                 andThen(() => go(t)(d.drawing))
               )
