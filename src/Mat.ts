@@ -55,7 +55,7 @@ export const rotateY = (angle: number): Mat => [
 export const rotateZ = (angle: number): Mat => [
   [cos(angle), sin(angle), 0, 0],
   [-sin(angle), cos(angle), 0, 0],
-  [0, 0, 0, 0],
+  [0, 0, 1, 0],
   [0, 0, 0, 1],
 ]
 
