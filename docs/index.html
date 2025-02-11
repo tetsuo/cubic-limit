@@ -3,7 +3,11 @@
   <body style="margin: 0; padding: 0">
     <h1>p161</h1>
     <ul>
-      <li><a href="http://www.emohr.com/mohr_cube1_161.html" target="_blank">http://www.emohr.com/mohr_cube1_161.html</a></li>
+      <li>
+        <a href="http://www.emohr.com/mohr_cube1_161.html" target="_blank"
+          >http://www.emohr.com/mohr_cube1_161.html</a
+        >
+      </li>
     </ul>
     <div
       style="margin: 0; padding: 20px; display: inline-block; background-color: #1c1b17"
@@ -12,19 +16,25 @@
 
     <h1>p197</h1>
     <ul>
-      <li><a href="http://www.emohr.com/mohr_cube2_197k.html" target="_blank">http://www.emohr.com/mohr_cube2_197k.html</a></li>
+      <li>
+        <a href="http://www.emohr.com/mohr_cube2_197k.html" target="_blank"
+          >http://www.emohr.com/mohr_cube2_197k.html</a
+        >
+      </li>
     </ul>
-    <div style="padding: 20px; display: inline-block; background-color: #1c1b17" id="container2">
-    </div>
+    <div style="padding: 20px; display: inline-block; background-color: #1c1b17" id="container2"></div>
     <h2>Source</h2>
     <ul>
       <li>
-        <a href="https://github.com/tetsuo/cubic-limit" target="_blank">https://github.com/tetsuo/cubic-limit</a>
+        <a href="https://github.com/tetsuo/cubic-limit" target="_blank"
+          >https://github.com/tetsuo/cubic-limit</a
+        >
       </li>
     </ul>
     <script src="fp-ts-bundle.min.js"></script>
     <script type="module">
-      import drawP167 from './drawCubicLimit.js'
+      import renderP161 from './P161.js'
+
       function throttle(fn, time) {
         let timeout = null
         return function () {
@@ -43,10 +53,10 @@
         let p1 = document.querySelector('#container1')
         let p2 = document.querySelector('#container2')
         while (p1.firstChild) {
-          p1.removeChild(p1.firstChild);
+          p1.removeChild(p1.firstChild)
         }
         while (p2.firstChild) {
-          p2.removeChild(p2.firstChild);
+          p2.removeChild(p2.firstChild)
         }
 
         let c = document.createElement('canvas')
@@ -58,7 +68,7 @@
         let container = document.querySelector('#container1')
         container.appendChild(c)
 
-        drawP167('root1', '#1c1b17') // Effect
+        renderP161('root1', '#1c1b17')
 
         c = document.createElement('canvas')
         c.id = 'root2'
