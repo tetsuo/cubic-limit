@@ -7,8 +7,8 @@ import { none, some } from 'effect/Option'
 import { Color, hex, white } from './Color'
 import * as S from './Shape'
 import * as D from './Drawing'
-import { draw, Size } from './draw'
 import { Vec } from './Vec'
+import { renderTo, Size } from './Html'
 
 const path = S.path(Foldable)
 
@@ -58,7 +58,7 @@ const getEdges = (i: number): NonEmptyReadonlyArray<Vec> => [
   [i, i + 4],
 ]
 
-const drawCube = (shouldDrawEdge: Predicate<number>): S.Composite =>
+const cubeShape = (shouldDrawEdge: Predicate<number>): S.Composite =>
   S.composite(
     pipe(
       range(0, 3),
@@ -82,7 +82,7 @@ const drawCube = (shouldDrawEdge: Predicate<number>): S.Composite =>
 
 const isBitSet = (n: number) => (index: number) => Boolean(n & (1 << index))
 
-const cubeFromNumber = flow(isBitSet, drawCube)
+const cubeFromNumber = flow(isBitSet, cubeShape)
 
 const nextNumber = (v: number) => pipe((v | (v - 1)) + 1, t => t | ((((t & -t) / (v & -v)) >> 1) - 1))
 
@@ -125,7 +125,7 @@ const drawBackground = ({ width, height }: Size, bgColor: Color): D.Drawing =>
     D.fillStyle(bgColor)
   )
 
-const cubicLimit = (size: Size, bgColor: Color): D.Drawing => {
+const drawP161 = (size: Size, bgColor: Color): D.Drawing => {
   const numCells = 31
   const cellSize = size.width / numCells
 
@@ -138,6 +138,7 @@ const cubicLimit = (size: Size, bgColor: Color): D.Drawing => {
   return D.many([background, lines, cubes])
 }
 
-const drawCubicLimit = (name: string, color: string) => draw(s => cubicLimit(s, hex(color)), name)
+const renderP161 = (canvasId: string, bgColor: string): void =>
+  renderTo(size => drawP161(size, hex(bgColor)), canvasId)
 
-export default drawCubicLimit
+export default renderP161

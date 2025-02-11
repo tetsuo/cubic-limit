@@ -1,21 +1,21 @@
 import { Tag } from 'effect/Context'
 import { Micro, andThen, forEach, provideService, service, succeed } from 'effect/Micro'
-import { Option, isSome } from 'effect/Option'
+import { Option, isSome, some, none } from 'effect/Option'
 import { flow, pipe } from 'effect/Function'
-import { matchLeft } from 'effect/Array'
-import { toCoords, Transform3D } from './Transform3D'
-import { identity, mul, rotateX, rotateY, rotateZ, scale, semigroupMat, translate } from './Mat'
+import { matchLeft, isNonEmptyReadonlyArray, NonEmptyReadonlyArray, map, append } from 'effect/Array'
+import { compact } from '@effect/typeclass/Filterable'
+import { Filterable } from '@effect/typeclass/data/Array'
+import { identity, Mat, rotateX, rotateY, rotateZ, scale, semigroupMat, translate, mul } from './Mat'
 import * as D from './Drawing'
 import * as Color from './Color'
-import { angle, Shape } from './Shape'
-import { Vec } from './Vec'
+import { angle, Point, Shape } from './Shape'
 import { fromShape } from './Path3D'
 
 class Render extends Tag('Render')<
   Render,
   {
-    readonly lineTo: (point: Vec) => Micro<void>
-    readonly moveTo: (point: Vec) => Micro<void>
+    readonly lineTo: (point: Point) => Micro<void>
+    readonly moveTo: (point: Point) => Micro<void>
     readonly fill: (fillRule?: CanvasFillRule) => Micro<void>
     readonly clip: (fillRule?: CanvasFillRule) => Micro<void>
     readonly stroke: () => Micro<void>
@@ -33,6 +33,14 @@ class Render extends Tag('Render')<
 
 const success: Micro<void> = succeed(undefined)
 
+const validateNonEmpty = <A>(as: ReadonlyArray<A>): Option<NonEmptyReadonlyArray<A>> =>
+  isNonEmptyReadonlyArray(as) ? some(as) : none()
+
+const compactArray = compact(Filterable)
+
+const toCoords = (shape: Shape, transform: Mat): ReadonlyArray<ReadonlyArray<Point>> =>
+  pipe(fromShape(shape), map(validateNonEmpty), compactArray, map(map(append(1))), map(mul(transform)))
+
 const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
   service(Render).pipe(
     andThen(c => {
@@ -46,7 +54,7 @@ const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
       const applyStyle: <A>(o: Option<A>, f: (a: A) => Micro<void>) => Micro<void> = (fa, f) =>
         isSome(fa) ? f(fa.value) : success
 
-      const renderSubPath: (subPath: ReadonlyArray<Vec>) => Micro<void> = matchLeft({
+      const renderSubPath: (subPath: ReadonlyArray<Point>) => Micro<void> = matchLeft({
         onEmpty: () => success,
         onNonEmpty: (head, tail) =>
           pipe(
@@ -55,24 +63,29 @@ const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
           ),
       })
 
-      const renderShape = (shape: Shape, transform: Transform3D) =>
-        forEach(toCoords(fromShape(shape), transform), renderSubPath, { discard: true })
+      const renderShape = (shape: Shape, transform: Mat) =>
+        forEach(toCoords(shape, transform), renderSubPath, { discard: true })
 
-      const go: (transform: Transform3D) => (drawing: D.Drawing) => Micro<void> = t => d => {
+      const go: (drawing: D.Drawing, transform: Mat) => Micro<void> = (d, t) => {
         switch (d._tag) {
           case 'Many':
-            return forEach(d.drawings, go(t), { discard: true })
+            return forEach(d.drawings, d => go(d, t), { discard: true })
           case 'Scale':
-            return go(mul(scale([d.scaleX, d.scaleY, d.scaleZ]))(t))(d.drawing)
+            return go(d.drawing, semigroupMat.combine(t, scale([d.scaleX, d.scaleY, d.scaleZ])))
           case 'Rotate':
             return go(
-              semigroupMat.combine(
-                mul(rotateX(angle(d.rotateX)))(rotateY(angle(d.rotateY))),
-                mul(rotateZ(angle(d.rotateZ)))(t)
-              )
-            )(d.drawing)
+              d.drawing,
+              semigroupMat.combineMany(t, [
+                rotateZ(angle(d.rotateZ)),
+                rotateY(angle(d.rotateY)),
+                rotateX(angle(d.rotateX)),
+              ])
+            )
           case 'Translate':
-            return go(mul(translate([d.translateX, d.translateY, d.translateZ]))(t))(d.drawing)
+            return go(
+              d.drawing,
+              semigroupMat.combine(t, translate([d.translateX, d.translateY, d.translateZ]))
+            )
           case 'Outline':
             return withContext(
               pipe(
@@ -100,12 +113,12 @@ const renderDrawing = (d: D.Drawing): Micro<void, never, Render> =>
                 c.beginPath(),
                 andThen(() => renderShape(d.shape, t)),
                 andThen(() => c.clip()),
-                andThen(() => go(t)(d.drawing))
+                andThen(() => go(d.drawing, t))
               )
             )
         }
       }
-      return go(identity)(d)
+      return go(d, identity)
     })
   )
 

@@ -4,4 +4,4 @@ import * as Shape from './Shape'
 
 export { Color, Drawing, Shape }
 
-export * from './draw'
+export * from './Html'

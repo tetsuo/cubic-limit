@@ -23,7 +23,7 @@ export interface Size {
   height: number
 }
 
-export const draw = (f: (size: Size) => Drawing, canvasId: string): void =>
+export const renderTo = (f: (size: Size) => Drawing, canvasId: string): void =>
   pipe(
     getCanvasElementById(canvasId),
     andThen(getOrThrowWith(() => new Error(`Unable to find canvas with id ${canvasId}`))),
