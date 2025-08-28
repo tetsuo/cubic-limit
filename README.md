@@ -1,10 +1,16 @@
 # cubic-limit
 
-Manfred Mohr's Cubic Limit in TypeScript and [Effect](https://effect.website/).
+This is an [Effect](https://effect.website/)-based fork of [graphics-ts](https://github.com/gcanti/graphics-ts) (originally based on [fp-ts](https://github.com/gcanti/fp-ts)), extended with basic 3D rendering support.
 
-Adapted for 3D and Effect (ported from [fp-ts](https://github.com/gcanti/fp-ts/)), this work is based on Giulio Canti's [graphics-ts](https://github.com/gcanti/graphics-ts), which in turn is based on [purescript-canvas](https://github.com/purescript-web/purescript-canvas) and [purescript-drawing](https://github.com/paf31/purescript-drawing).
+It's not intended for general reuse as a module, it was implemented specifically to reproduce [Manfred Mohr](https://www.emohr.com/)'s Cubic Limit.
 
-[Read the blog post](https://tetsuo.github.io/cubic-limit-in-effect.html)
+You can clone it with:
+
+```sh
+git clone git@github.com:tetsuo/cubic-limit.git
+```
+
+👉 [**Read the tutorial**](./TUTORIAL.md)
 
 ![p161](./p161.png)
 
